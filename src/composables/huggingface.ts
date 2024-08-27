@@ -5,6 +5,7 @@ import {
   PreTrainedModel,
   AutoProcessor,
 } from '@huggingface/transformers'
+import { getGPUTier } from 'detect-gpu'
 import { onMounted, ref } from 'vue'
 
 export const modelId = 'briaai/RMBG-1.4'
@@ -15,15 +16,25 @@ export const useModel = (modelId: string) => {
   const loaded = ref(false)
 
   onMounted(async () => {
-    env.backends.onnx.wasm.proxy = false
+    env.allowLocalModels = false
+    env.backends.onnx.wasm.proxy = true
+    const gpuTier = await getGPUTier()
+    const modelSettings: Parameters<typeof AutoModel.from_pretrained>[1] = {}
 
-    model.value = await AutoModel.from_pretrained(modelId, {
-      device: 'webgpu',
-    })
+    if (gpuTier?.fps && !gpuTier?.isMobile) {
+      modelSettings.device = 'webgpu'
+      modelSettings.dtype = 'fp32'
+    }
 
-    processor.value = await AutoProcessor.from_pretrained(modelId)
+    try {
+      model.value = await AutoModel.from_pretrained(modelId, modelSettings)
 
-    loaded.value = true
+      processor.value = await AutoProcessor.from_pretrained(modelId)
+
+      loaded.value = true
+    } catch (err) {
+      console.error(err)
+    }
   })
 
   return { model, processor, loaded }

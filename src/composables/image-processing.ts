@@ -25,6 +25,11 @@ export const useImageProcessing = () => {
     isProcessing.value = true
     isDownloadReady.value = false
 
+    if (!model.value || !processor.value) {
+      console.error('Model or processor not loaded')
+      return
+    }
+
     for (const file of files) {
       const startTime = Date.now()
       const index = processedImages.value.push({

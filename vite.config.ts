@@ -14,7 +14,16 @@ export default defineConfig({
   resolve: {
     alias: {
       '@': path.resolve(__dirname, './src'),
+      ...(process.env.NODE_ENV === 'production'
+        ? {
+            '@huggingface/transformers':
+              'https://cdn.jsdelivr.net/npm/@huggingface/transformers@3.0.0-alpha.9',
+          }
+        : {}),
     },
   },
   plugins: [vue()],
+  build: {
+    target: 'esnext',
+  },
 })
