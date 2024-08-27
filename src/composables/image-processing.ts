@@ -1,4 +1,4 @@
-import { ref, Ref } from 'vue'
+import { onMounted, onUnmounted, ref, Ref } from 'vue'
 import { RawImage } from '@huggingface/transformers'
 
 import { modelId, useModel } from './huggingface'
@@ -96,6 +96,38 @@ export const useImageProcessing = () => {
     isProcessing.value = false
     isDownloadReady.value = true
   }
+
+  const handleGlobalPaste = async (event: ClipboardEvent) => {
+    const items = event.clipboardData?.items
+
+    if (!items) return
+
+    const imageFiles: File[] = []
+
+    for (let i = 0; i < items.length; i++) {
+      if (items[i].type.indexOf('image') !== -1) {
+        const blob = items[i].getAsFile()
+        if (blob) {
+          const file = new File([blob], `pasted-image-${Date.now()}.png`, {
+            type: 'image/png',
+          })
+          imageFiles.push(file)
+        }
+      }
+    }
+
+    if (imageFiles.length > 0) {
+      await processImages(imageFiles)
+    }
+  }
+
+  onMounted(() => {
+    document.addEventListener('paste', handleGlobalPaste)
+  })
+
+  onUnmounted(() => {
+    document.removeEventListener('paste', handleGlobalPaste)
+  })
 
   return {
     processedImages,
