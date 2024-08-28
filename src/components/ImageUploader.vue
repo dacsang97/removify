@@ -5,11 +5,13 @@ import { Button } from '@/components/ui/button'
 interface Props {
   buttonText?: string
   existingFiles?: File[]
+  isLoading: boolean
 }
 
 withDefaults(defineProps<Props>(), {
   buttonText: 'Choose file or drag here',
   existingFiles: () => [],
+  isLoading: true,
 })
 
 const emit = defineEmits<{
@@ -58,8 +60,9 @@ const handleDrop = (event: DragEvent) => {
         accept="image/*"
         multiple
         class="hidden"
+        :disabled="isLoading"
       />
-      <Button class="w-full" @click="openFileDialog">
+      <Button class="w-full" @click="openFileDialog" :disabled="isLoading">
         {{ buttonText }}
       </Button>
     </div>

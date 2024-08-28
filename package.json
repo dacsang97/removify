@@ -9,7 +9,7 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "@huggingface/transformers": "3.0.0-alpha.9",
+    "@huggingface/transformers": "3.0.0-alpha.10",
     "@tanstack/vue-table": "^8.20.5",
     "@zip.js/zip.js": "^2.7.51",
     "class-variance-authority": "^0.7.0",

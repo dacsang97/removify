@@ -17,7 +17,7 @@ export default defineConfig({
       ...(process.env.NODE_ENV === 'production'
         ? {
             '@huggingface/transformers':
-              'https://cdn.jsdelivr.net/npm/@huggingface/transformers@3.0.0-alpha.9',
+              'https://cdn.jsdelivr.net/npm/@huggingface/transformers@3.0.0-alpha.10',
           }
         : {}),
     },

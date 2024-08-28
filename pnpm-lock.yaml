@@ -6,8 +6,8 @@ settings:
 
 dependencies:
   '@huggingface/transformers':
-    specifier: 3.0.0-alpha.9
-    version: 3.0.0-alpha.9
+    specifier: 3.0.0-alpha.10
+    version: 3.0.0-alpha.10
   '@tanstack/vue-table':
     specifier: ^8.20.5
     version: 8.20.5(vue@3.4.38)
@@ -339,12 +339,12 @@ packages:
     engines: {node: '>=18'}
     dev: false
 
-  /@huggingface/transformers@3.0.0-alpha.9:
-    resolution: {integrity: sha512-vs37QQ4qaUBUMOf90Zs8drS/Prem8XtRAJPQtKV14ClDQkB9p+L44tzIslgB8KSjzQ9orvIk+tHX+uqQZffvrg==}
+  /@huggingface/transformers@3.0.0-alpha.10:
+    resolution: {integrity: sha512-jfAPcK+1nIrcWOp5o6DZcY5mRrBkWfs0xUBKYNyLoSvadPuo2G9TazqXMmxBaXS5ppdqXRTdyRzK7CnwzwykOA==}
     dependencies:
       '@huggingface/jinja': 0.3.0
       onnxruntime-node: 1.19.0
-      onnxruntime-web: 1.20.0-dev.20240821-009209e016
+      onnxruntime-web: 1.20.0-dev.20240827-1d059b8702
       sharp: 0.33.5
     dev: false
 
@@ -1479,8 +1479,8 @@ packages:
     resolution: {integrity: sha512-Oo16UIJ/xLOtZDVGcL4bL8EP8MiNFztyBmR3pB14D+cl/UCpOgHHzEk0MADSmYXQ0FgyEegPXtOFcJqhq1YRsw==}
     dev: false
 
-  /onnxruntime-common@1.20.0-dev.20240816-b2d603abda:
-    resolution: {integrity: sha512-tRzeOV7Mrmajvn7VuvqSn3mRx120EVVmaH+vyAhYFB6Zw52V9Jox9ya082ChECXqxrJE42PnSkb3TWvsVtEblQ==}
+  /onnxruntime-common@1.20.0-dev.20240827-5d54dc1462:
+    resolution: {integrity: sha512-oR+xPRD64OI+w9nRLXQi9rEXYZ5W9BhqVi688sUTreU9J6pK182JYblmHjvapCg+Tta6MbkAsr3T1NZHM3tB1g==}
     dev: false
 
   /onnxruntime-node@1.19.0:
@@ -1492,13 +1492,13 @@ packages:
       tar: 7.4.3
     dev: false
 
-  /onnxruntime-web@1.20.0-dev.20240821-009209e016:
-    resolution: {integrity: sha512-W+WqM3jlc83Ej+7F/lUUOZKDaoOR1Fo22w3GnTfuV0bGFjxC8QHtj56Ul8LaRAr7OVvwoeni+uZt9gxpT+mCjg==}
+  /onnxruntime-web@1.20.0-dev.20240827-1d059b8702:
+    resolution: {integrity: sha512-v1t3TgnOmyzA1lGcUiqp6kZDv7QxO+yJI00vHp8lyjgBrnxkLY+6fqFZpBfm81AH5sRaCdG+HsOmb5Y37TIAyw==}
     dependencies:
       flatbuffers: 1.12.0
       guid-typescript: 1.0.9
       long: 5.2.3
-      onnxruntime-common: 1.20.0-dev.20240816-b2d603abda
+      onnxruntime-common: 1.20.0-dev.20240827-5d54dc1462
       platform: 1.3.6
       protobufjs: 7.4.0
     dev: false

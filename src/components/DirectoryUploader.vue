@@ -5,11 +5,13 @@ import { Button } from '@/components/ui/button'
 interface Props {
   buttonText?: string
   existingFiles?: File[]
+  isLoading: boolean
 }
 
 withDefaults(defineProps<Props>(), {
   buttonText: 'Choose directory or drag here',
   existingFiles: () => [],
+  isLoading: true,
 })
 const emit = defineEmits<{
   (e: 'files-selected', files: File[]): void
@@ -77,8 +79,9 @@ const traverseFileTree = (item: any, files: File[]) => {
         webkitdirectory
         directory
         class="hidden"
+        :disabled="isLoading"
       />
-      <Button class="w-full" @click="openDirectoryDialog">
+      <Button class="w-full" @click="openDirectoryDialog" :disabled="isLoading">
         {{ buttonText }}
       </Button>
     </div>

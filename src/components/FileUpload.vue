@@ -24,6 +24,12 @@ import { BlobReader, BlobWriter, ZipWriter } from '@zip.js/zip.js'
 const { toast } = useToast()
 const { processedImages, isDownloadReady, processImages } = useImageProcessing()
 
+interface Props {
+  isLoading: boolean
+}
+
+const { isLoading } = defineProps<Props>()
+
 const files = ref<File[]>([])
 
 const handleFilesSelected = async (files: File[]) => {
@@ -73,6 +79,7 @@ const downloadAsZip = async () => {
       @files-selected="handleFilesSelected"
       buttonText="Choose file or drag here"
       :existingFiles="files"
+      :is-loading="isLoading"
     />
 
     <p class="text-center text-sm text-gray-500">Or upload a directory</p>
@@ -81,6 +88,7 @@ const downloadAsZip = async () => {
       @files-selected="handleFilesSelected"
       buttonText="Choose directory or drag here"
       :existingFiles="files"
+      :is-loading="isLoading"
     />
     <p class="text-center text-sm text-gray-500">
       Images are not uploaded to the server, they are processed directly in your
@@ -150,6 +158,16 @@ const downloadAsZip = async () => {
         </TableRow>
       </TableBody>
     </Table>
+    <div class="fixed right-0 bottom-0 p-8">
+      <Transition name="fade" mode="out-in">
+        <div v-if="isLoading" class="bg-white shadow-md rounded-lg p-4">
+          <p class="text-lg font-semibold">Loading model...</p>
+          <p class="text-sm text-gray-500">
+            Please wait while the model is being loaded.
+          </p>
+        </div>
+      </Transition>
+    </div>
   </div>
 </template>
 
