@@ -16,6 +16,7 @@
     "clsx": "^2.1.1",
     "detect-gpu": "^5.0.45",
     "lucide-vue-next": "^0.436.0",
+    "medium-zoom": "^1.1.0",
     "radix-vue": "^1.9.5",
     "tailwind-merge": "^2.5.2",
     "tailwindcss-animate": "^1.0.7",

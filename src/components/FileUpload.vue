@@ -1,77 +1,27 @@
 <script setup lang="ts">
-import { Button } from '@/components/ui/button'
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from '@/components/ui/table'
 import { Progress } from '@/components/ui/progress'
-import { useToast } from '@/components/ui/toast/use-toast'
 
 import ImageUploader from './ImageUploader.vue'
 import DirectoryUploader from './DirectoryUploader.vue'
-import AnimatedDuration from './AnimatedDuration.vue'
 import { ref } from 'vue'
 
-import {
-  ProcessedImage,
-  useImageProcessing,
-} from '@/composables/image-processing'
-import { BlobReader, BlobWriter, ZipWriter } from '@zip.js/zip.js'
+import { useImageProcessing } from '@/composables/image-processing'
 import { modelId, useModel } from '@/composables/huggingface'
+import ResultTable from './ResultTable.vue'
 
-const { toast } = useToast()
 const { isModelLoading, isProcessorLoading, modelProgress, processorProgress } =
   useModel(modelId)
-const { processedImages, isDownloadReady, processImages } = useImageProcessing()
+const { processImages, processedImages } = useImageProcessing()
 
 const files = ref<File[]>([])
 
 const handleFilesSelected = async (files: File[]) => {
   await processImages(files)
 }
-
-const downloadImage = (image: ProcessedImage) => {
-  const link = document.createElement('a')
-  link.href = image.downloadUrl
-  link.download = image.filename
-  document.body.appendChild(link)
-  link.click()
-  document.body.removeChild(link)
-}
-
-const copyImage = async (image: ProcessedImage) => {
-  const res = await fetch(image.downloadUrl)
-  const blob = await res.blob()
-  navigator.clipboard.write([new ClipboardItem({ [blob.type]: blob })])
-  toast({
-    title: 'Image copied',
-  })
-}
-
-const downloadAsZip = async () => {
-  const zipWriter = new ZipWriter(new BlobWriter('application/zip'))
-  for (const image of processedImages.value) {
-    if (image.status === 'done') {
-      const response = await fetch(image.downloadUrl)
-      const blob = await response.blob()
-      await zipWriter.add(image.filename, new BlobReader(blob))
-    }
-  }
-  const zipBlob = await zipWriter.close()
-  const downloadUrl = URL.createObjectURL(zipBlob)
-  const a = document.createElement('a')
-  a.href = downloadUrl
-  a.download = 'images.zip'
-  a.click()
-  URL.revokeObjectURL(downloadUrl)
-}
 </script>
 
 <template>
+  {{ processImages.length }}
   <div class="flex flex-col gap-4">
     <ImageUploader
       @files-selected="handleFilesSelected"
@@ -90,70 +40,9 @@ const downloadAsZip = async () => {
       Images are not uploaded to the server, they are processed directly in your
       browser.
     </p>
-    <Button
-      variant="outline"
-      class="ml-auto"
-      :disabled="!isDownloadReady"
-      @click="downloadAsZip"
-    >
-      Download as zip
-    </Button>
-    <Table>
-      <TableHeader>
-        <TableRow>
-          <TableHead>No</TableHead>
-          <TableHead>Image</TableHead>
-          <TableHead>Duration</TableHead>
-          <TableHead>Actions</TableHead>
-        </TableRow>
-      </TableHeader>
-      <TableBody>
-        <TableRow
-          v-for="(image, index) in processedImages"
-          :key="image.filename"
-        >
-          <TableCell>{{ index + 1 }}</TableCell>
-          <TableCell>
-            <div className="w-fit h-20 preview">
-              <Transition name="fade" mode="out-in">
-                <img
-                  :key="image.status"
-                  :src="image.previewUrl"
-                  alt="Preview"
-                  className="h-20 object-scale-down rounded-lg"
-                />
-              </Transition>
-            </div>
-          </TableCell>
-          <TableCell>
-            <AnimatedDuration
-              :startTime="image.startTime"
-              :endTime="
-                image.status !== 'loading'
-                  ? image.startTime + image.duration
-                  : null
-              "
-              :status="image.status"
-            />
-          </TableCell>
-          <TableCell>
-            <div class="flex space-x-2">
-              <Button
-                :disabled="image.status !== 'done'"
-                @click="copyImage(image)"
-              >
-                Copy
-              </Button>
-              <Button
-                :disabled="image.status !== 'done'"
-                @click="downloadImage(image)"
-                >Download</Button
-              >
-            </div>
-          </TableCell>
-        </TableRow>
-      </TableBody>
-    </Table>
+
+    <ResultTable />
+
     <div class="fixed right-0 bottom-0 p-8">
       <Transition name="fade" mode="out-in">
         <div v-if="isModelLoading" class="bg-white shadow-md rounded-lg p-4">
