@@ -1,23 +1,23 @@
 <script setup lang="ts">
 import { ref } from 'vue'
 import { Button } from '@/components/ui/button'
+import { modelId, useModel } from '@/composables/huggingface'
 
 interface Props {
   buttonText?: string
   existingFiles?: File[]
-  isLoading: boolean
 }
 
 withDefaults(defineProps<Props>(), {
   buttonText: 'Choose file or drag here',
   existingFiles: () => [],
-  isLoading: true,
 })
 
 const emit = defineEmits<{
   (e: 'files-selected', files: File[]): void
 }>()
 
+const { isLoading } = useModel(modelId)
 const fileInput = ref<HTMLInputElement | null>(null)
 const isDragging = ref(false)
 

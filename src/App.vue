@@ -1,15 +1,12 @@
 <script setup lang="ts">
 import Toaster from '@/components/ui/toast/Toaster.vue'
 import FileUpload from '@/components/FileUpload.vue'
-import { modelId, useModel } from '@/composables/huggingface'
-
-const { loaded } = useModel(modelId)
 </script>
 
 <template>
   <div class="app-container">
     <div class="container mx-auto p-4">
-      <FileUpload :isLoading="!loaded" />
+      <FileUpload />
     </div>
   </div>
   <Toaster />
