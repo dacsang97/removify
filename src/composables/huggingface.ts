@@ -17,7 +17,7 @@ export const useModel = (modelId: string) => {
 
   onMounted(async () => {
     env.allowLocalModels = false
-    env.backends.onnx.wasm.proxy = true
+    env.backends.onnx.wasm!.proxy = true
     const gpuTier = await getGPUTier()
     const modelSettings: Parameters<typeof AutoModel.from_pretrained>[1] = {}
 
